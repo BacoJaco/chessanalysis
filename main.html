@@ -1,28 +1,20 @@
 <!DOCTYPE html>
 <html>
-<head>
-    
+ <head>
+  <!--Including jQuery:-->
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 
-<!--  Including jQuery, another tool chessboardjs uses:-->
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <!--Including the chessboardjs files:-->
+  <script src="./js/chessboard-1.0.0.js"></script>
+  <link rel="stylesheet" href="css/chessboard-1.0.0.min.css">
 
-<!--  Including the chessboardjs files:-->
-    <script src="./js/chessboard-1.0.0.js"></script>
-    <link rel="stylesheet" href="css/chessboard-1.0.0.min.css">
+  <!--chessjs for legal moves/mates-->
+  <script type="module" src="chess.js"></script>
 
+  <script type="module" src="./script.js"></script>
+ </head>
 
-  
-  </head>
-<body>
+ <body>
   <div id="board" style="width: 400px"></div>
-  </body>
-
-  
-  
-<!--
-  Now including our own custom JS
-  Note that we could write JS directly in between the script tags if you'd 
-  rather, but i didn't want to so i put it in a new file. 
--->
-  <script src="./script.js"></script>
+ </body>
 </html>
