@@ -1,10 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8" />
-    <title>Chess Analysis</title>
-</head>
-<body>
     
-</body>
+
+<!--  Including jQuery, another tool chessboardjs uses:-->
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+
+<!--  Including the chessboardjs files:-->
+    <script src="./js/chessboard-1.0.0.js"></script>
+    <link rel="stylesheet" href="css/chessboard-1.0.0.min.css">
+
+
+  
+  </head>
+<body>
+  <div id="board" style="width: 400px"></div>
+  </body>
+
+  
+  
+<!--
+  Now including our own custom JS
+  Note that we could write JS directly in between the script tags if you'd 
+  rather, but i didn't want to so i put it in a new file. 
+-->
+  <script src="./script.js"></script>
 </html>
