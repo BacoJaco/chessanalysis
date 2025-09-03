@@ -31,8 +31,9 @@ function updateButtonStates() {
 function goToNextMove() {
   board.position(fenHistory[currentMoveIndex + 1]);
   getBestMove({ fen: fenHistory[currentMoveIndex + 1], depth: 20, variants: 1 }).then((data) => {
-    //console.log(data);
-    document.getElementById("bestMove").innerText = data.text;
+    console.log(data);
+    errorCheck(data);
+    mateCheck(data);
   });
   currentMoveIndex++;
   updateButtonStates();
@@ -41,7 +42,8 @@ function goToNextMove() {
 function goToPrevMove() {
   board.position(fenHistory[currentMoveIndex - 1]);
   getBestMove({ fen: fenHistory[currentMoveIndex - 1], depth: 20, variants: 1 }).then((data) => {
-    document.getElementById("bestMove").innerText = data.text;
+    errorCheck(data);
+    mateCheck(data);
   });
   currentMoveIndex--;
   updateButtonStates();
@@ -50,7 +52,8 @@ function goToPrevMove() {
 function goToStartMove() {
   board.position(fenHistory[0]);
   getBestMove({ fen: fenHistory[0], depth: 20, variants: 1 }).then((data) => {
-    document.getElementById("bestMove").innerText = data.text;
+    errorCheck(data);
+    mateCheck(data);
   });
   currentMoveIndex = 0;
   updateButtonStates();
@@ -59,7 +62,8 @@ function goToStartMove() {
 function goToEndMove() {
   board.position(fenHistory[fenHistory.length - 1]);
   getBestMove({ fen: fenHistory[fenHistory.length - 1], depth: 20, variants: 1 }).then((data) => {
-    document.getElementById("bestMove").innerText = data.text;
+    errorCheck(data);
+    mateCheck(data);
   });
   currentMoveIndex = fenHistory.length - 1;
   updateButtonStates();
@@ -108,4 +112,20 @@ async function getBestMove(data = {}) {
         body: JSON.stringify(data),
     });
     return response.json();
+}
+
+function mateCheck(data) {
+  if(data.mate != null) {
+    document.getElementById("mateIn").innerText = "Mate: In " + data.mate;
+  } else {
+    document.getElementById("mateIn").innerText = "Mate: Not Available";
+  }
+}
+
+function errorCheck(data) {
+  if(data.type == "error") {
+    document.getElementById("bestMove").innerText = "Not Available";
+  } else {
+    document.getElementById("bestMove").innerText = data.text;
+  }
 }
