@@ -1,7 +1,7 @@
 import { Chess } from './chess.js'
 
 var board = null;
-var currentMoveIndex = 0;
+var currentMoveIndex;
 var fenHistory = [];
 
 const pgnInput = document.getElementById('pgn');
@@ -53,6 +53,8 @@ function goToEndMove() {
 }
 
 function boardSetup() {
+  currentMoveIndex = 0;
+
   // A chess instance for getting the move history
   const chessForPGN = new Chess();
 
@@ -83,3 +85,24 @@ function boardSetup() {
 
   updateButtonStates();
 }
+
+async function getBestMove(fen) {
+  try {
+    var response = await fetch(`https://stockfish.online/api/stockfish.php?fen=${fen}&depth=${16}`);
+
+    response = await response.json();
+
+    if (response.success) {
+      var bestMoveSet = response.bestmove;
+      
+      return bestMoveSet;
+
+    } else {
+      alert("API did not return a successful response.");
+    }
+
+  } catch (error) {
+    alert("Error fetching Stockfish move:", error);
+  }
+}
+
