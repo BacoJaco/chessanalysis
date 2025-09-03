@@ -14,10 +14,10 @@ const prev = document.getElementById('prev');
 const next = document.getElementById('next'); 
 const end = document.getElementById('end'); 
 
-start.addEventListener('click', goToStartMove);
-next.addEventListener('click', goToNextMove);
-prev.addEventListener('click', goToPrevMove);
-end.addEventListener('click', goToEndMove);
+start.addEventListener('click', () => goToMove(0));
+next.addEventListener('click', () => goToMove(currentMoveIndex + 1));
+prev.addEventListener('click', () => goToMove(currentMoveIndex - 1));
+end.addEventListener('click', () => goToMove(fenHistory.length - 1));
 
 
 // Buttons disable if move is not available
@@ -28,44 +28,15 @@ function updateButtonStates() {
     end.disabled = currentMoveIndex >= fenHistory.length - 1;
 }
 
-function goToNextMove() {
-  board.position(fenHistory[currentMoveIndex + 1]);
-  getBestMove({ fen: fenHistory[currentMoveIndex + 1], depth: 20, variants: 1 }).then((data) => {
+// Buttons moves
+function goToMove(moveNum) {
+  board.position(fenHistory[moveNum]);
+  getBestMove({ fen: fenHistory[moveNum], depth: 20, variants: 1 }).then((data) => {
     console.log(data);
     errorCheck(data);
     mateCheck(data);
   });
-  currentMoveIndex++;
-  updateButtonStates();
-}
-
-function goToPrevMove() {
-  board.position(fenHistory[currentMoveIndex - 1]);
-  getBestMove({ fen: fenHistory[currentMoveIndex - 1], depth: 20, variants: 1 }).then((data) => {
-    errorCheck(data);
-    mateCheck(data);
-  });
-  currentMoveIndex--;
-  updateButtonStates();
-}
-
-function goToStartMove() {
-  board.position(fenHistory[0]);
-  getBestMove({ fen: fenHistory[0], depth: 20, variants: 1 }).then((data) => {
-    errorCheck(data);
-    mateCheck(data);
-  });
-  currentMoveIndex = 0;
-  updateButtonStates();
-}
-
-function goToEndMove() {
-  board.position(fenHistory[fenHistory.length - 1]);
-  getBestMove({ fen: fenHistory[fenHistory.length - 1], depth: 20, variants: 1 }).then((data) => {
-    errorCheck(data);
-    mateCheck(data);
-  });
-  currentMoveIndex = fenHistory.length - 1;
+  currentMoveIndex = moveNum;
   updateButtonStates();
 }
 
