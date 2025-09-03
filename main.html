@@ -1,36 +1,36 @@
 <!DOCTYPE html>
 <html>
  <head>
-  <!--Including jQuery:-->
-  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <!-- Including jQuery: -->
+  <script src = "https://code.jquery.com/jquery-1.12.4.min.js"></script>
 
-  <!--Including the chessboardjs files:-->
-  <script src="./js/chessboard-1.0.0.js"></script>
-  <link rel="stylesheet" href="css/chessboard-1.0.0.min.css">
+  <!-- Including the chessboardjs files: -->
+  <script src = "./js/chessboard-1.0.0.js"></script>
+  <link rel = "stylesheet" href = "css/chessboard-1.0.0.min.css">
 
-  <!--chessjs for legal moves/mates-->
-  <script type="module" src="chess.js"></script>
+  <!-- chessjs for legal moves/mates -->
+  <script type = "module" src = "chess.js"></script>
 
-  <script type="module" src="./script.js"></script>
+  <script type = "module" src = "./script.js"></script>
  </head>
 
  <body>
-  <div id="board" style="width: 400px"></div>
+  <div id = "board" style = "width: 400px"></div>
 
   <p></p>
 
   <!-- Navigation Controls -->
-  <div id="controls" class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 hidden">
-      <button id="start" class="w-full bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">|&lt;</button>
-      <button id="prev" class="w-full bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">&lt; Prev</button>
-      <button id="next" class="w-full bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">Next &gt;</button>
-      <button id="end" class="w-full bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">&gt;|</button>
+  <div id = "controls" class = "mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 hidden">
+      <button id = "start" class = "w-full bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">|&lt;</button>
+      <button id = "prev" class = "w-full bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">&lt; Prev</button>
+      <button id = "next" class = "w-full bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">Next &gt;</button>
+      <button id = "end" class = "w-full bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">&gt;|</button>
   </div>
 
   <p></p>
 
-  <input type="text" id="pgn">
-  <button id="pgnBtn">Submit</button>
-  
+  <input type = "text" id = "pgn">
+  <button id = "pgnBtn">Submit</button>
+
  </body>
 </html>
