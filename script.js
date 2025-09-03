@@ -30,24 +30,37 @@ function updateButtonStates() {
 
 function goToNextMove() {
   board.position(fenHistory[currentMoveIndex + 1]);
+  getBestMove({ fen: fenHistory[currentMoveIndex + 1], depth: 20, variants: 1 }).then((data) => {
+    //console.log(data);
+    document.getElementById("bestMove").innerText = data.text;
+  });
   currentMoveIndex++;
   updateButtonStates();
 }
 
 function goToPrevMove() {
   board.position(fenHistory[currentMoveIndex - 1]);
+  getBestMove({ fen: fenHistory[currentMoveIndex - 1], depth: 20, variants: 1 }).then((data) => {
+    document.getElementById("bestMove").innerText = data.text;
+  });
   currentMoveIndex--;
   updateButtonStates();
 }
 
 function goToStartMove() {
   board.position(fenHistory[0]);
+  getBestMove({ fen: fenHistory[0], depth: 20, variants: 1 }).then((data) => {
+    document.getElementById("bestMove").innerText = data.text;
+  });
   currentMoveIndex = 0;
   updateButtonStates();
 }
 
 function goToEndMove() {
   board.position(fenHistory[fenHistory.length - 1]);
+  getBestMove({ fen: fenHistory[fenHistory.length - 1], depth: 20, variants: 1 }).then((data) => {
+    document.getElementById("bestMove").innerText = data.text;
+  });
   currentMoveIndex = fenHistory.length - 1;
   updateButtonStates();
 }
@@ -86,23 +99,13 @@ function boardSetup() {
   updateButtonStates();
 }
 
-async function getBestMove(fen) {
-  try {
-    var response = await fetch(`https://stockfish.online/api/stockfish.php?fen=${fen}&depth=${16}`);
-
-    response = await response.json();
-
-    if (response.success) {
-      var bestMoveSet = response.bestmove;
-      
-      return bestMoveSet;
-
-    } else {
-      alert("API did not return a successful response.");
-    }
-
-  } catch (error) {
-    alert("Error fetching Stockfish move:", error);
-  }
+async function getBestMove(data = {}) {
+    const response = await fetch("https://chess-api.com/v1", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data),
+    });
+    return response.json();
 }
-
