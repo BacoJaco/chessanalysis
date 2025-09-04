@@ -1,8 +1,12 @@
 import { Chess } from './chess.js'
 
 var board = null;
+var contBoard = null;
 var currentMoveIndex;
+var contMoveIndex;
 var fenHistory = [];
+var contFenHistory = [];
+var moves = [];
 
 const pgnInput = document.getElementById('pgn');
 const pgnButton = document.getElementById('pgnBtn');
@@ -28,7 +32,7 @@ function boardSetup() {
   const pgn = pgnInput.value;
   chessForPGN.loadPgn(pgn);
 
-  const moves = chessForPGN.history();
+  moves = chessForPGN.history();
 
   // A second chess instance for replaying the game move by move
   const chessForReplay = new Chess();
@@ -50,6 +54,10 @@ function boardSetup() {
   board = Chessboard('board', config);
 
   updateButtonStates();
+  contStart.disabled = true;
+  contPrev.disabled = true;
+  contNext.disabled = true;
+  contEnd.disabled = true;
 }
 
 // Buttons disable if move is not available
@@ -100,4 +108,59 @@ function printBestMove(data) {
   } else {
     document.getElementById("bestMove").innerText = "Best Move: " + data.text;
   }
+}
+
+const continuation = document.getElementById('continuationBtn');
+
+continuation.addEventListener('click', () => getBestMove( { fen: fenHistory[currentMoveIndex], depth: 20, variants: 1} ).then((data) => {
+  continuationBoardSetup(data.lan, data.continuationArr);
+}));
+
+const contStart = document.getElementById('contStart');
+const contPrev = document.getElementById('contPrev');
+const contNext = document.getElementById('contNext');
+const contEnd = document.getElementById('contEnd');
+
+contStart.addEventListener('click', () => goToContMove(currentMoveIndex));
+contNext.addEventListener('click', () => goToContMove(contMoveIndex + 1));
+contPrev.addEventListener('click', () => goToContMove(contMoveIndex - 1));
+contEnd.addEventListener('click', () => goToContMove(contFenHistory.length - 1));
+
+function continuationBoardSetup(bestMove, posArr) {
+  contMoveIndex = 0;
+  const chessForCont = new Chess();
+
+  for(var i = 0; i < currentMoveIndex; i++) {
+    chessForCont.move(moves[i]);
+  }
+
+  contFenHistory = [];
+  chessForCont.move(bestMove);
+  contFenHistory.push(chessForCont.fen());
+  posArr.forEach(pos => {
+    chessForCont.move(pos);
+    contFenHistory.push(chessForCont.fen());
+  });
+
+  var config = {
+    draggable: false,
+    position: contFenHistory[0]
+  }
+
+  contBoard = Chessboard('contBoard', config);
+  updateContButtonStates();
+}
+
+function goToContMove(moveNum) {
+  contBoard.position(contFenHistory[moveNum]);
+  contMoveIndex = moveNum;
+  updateContButtonStates();
+}
+
+// Buttons disable if move is not available
+function updateContButtonStates() {
+    contStart.disabled = contMoveIndex <= 0;
+    contPrev.disabled = contMoveIndex <= 0;
+    contNext.disabled = contMoveIndex >= contFenHistory.length - 1;
+    contEnd.disabled = contMoveIndex >= contFenHistory.length - 1;
 }

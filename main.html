@@ -17,7 +17,7 @@
  <body>
   <div id = "board" style = "width: 400px"></div>
 
-  <p></p>
+    <p></p>
 
   <!-- Navigation Controls -->
   <div id = "controls" class = "mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 hidden">
@@ -27,9 +27,21 @@
       <button id = "end" class = "w-full bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">&gt;|</button>
   </div>
 
+  <div id = "contBoard" style = "width: 400px"></div>
+
   <p></p>
 
-  <h2 id = "bestMove">Best Move: Not Available</h2>
+  <!-- Navigation Controls -->
+  <div id = "controls" class = "mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 hidden">
+      <button id = "contStart" class = "w-full bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">|&lt;</button>
+      <button id = "contPrev" class = "w-full bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">&lt; Prev</button>
+      <button id = "contNext" class = "w-full bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">Next &gt;</button>
+      <button id = "contEnd" class = "w-full bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">&gt;|</button>
+  </div>
+
+  <p></p>
+
+  <h2 id = "bestMove">Best Move: Not Available</h2> <button id = "continuationBtn">Show Continuation</button>
   <h2 id = "mateIn">Mate: Not Available</h2>
 
   <p></p>
