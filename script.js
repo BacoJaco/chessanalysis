@@ -19,27 +19,6 @@ next.addEventListener('click', () => goToMove(currentMoveIndex + 1));
 prev.addEventListener('click', () => goToMove(currentMoveIndex - 1));
 end.addEventListener('click', () => goToMove(fenHistory.length - 1));
 
-
-// Buttons disable if move is not available
-function updateButtonStates() {
-    start.disabled = currentMoveIndex <= 0;
-    prev.disabled = currentMoveIndex <= 0;
-    next.disabled = currentMoveIndex >= fenHistory.length - 1;
-    end.disabled = currentMoveIndex >= fenHistory.length - 1;
-}
-
-// Buttons moves
-function goToMove(moveNum) {
-  board.position(fenHistory[moveNum]);
-  getBestMove({ fen: fenHistory[moveNum], depth: 20, variants: 1 }).then((data) => {
-    console.log(data);
-    errorCheck(data);
-    mateCheck(data);
-  });
-  currentMoveIndex = moveNum;
-  updateButtonStates();
-}
-
 function boardSetup() {
   currentMoveIndex = 0;
 
@@ -63,7 +42,6 @@ function boardSetup() {
     fenHistory.push(chessForReplay.fen());
   });
 
-
   var config = {
     draggable: false,
     position: fenHistory[0]
@@ -74,6 +52,27 @@ function boardSetup() {
   updateButtonStates();
 }
 
+// Buttons disable if move is not available
+function updateButtonStates() {
+    start.disabled = currentMoveIndex <= 0;
+    prev.disabled = currentMoveIndex <= 0;
+    next.disabled = currentMoveIndex >= fenHistory.length - 1;
+    end.disabled = currentMoveIndex >= fenHistory.length - 1;
+}
+
+// Buttons moves
+function goToMove(moveNum) {
+  board.position(fenHistory[moveNum]);
+  getBestMove({ fen: fenHistory[moveNum], depth: 20, variants: 1 }).then((data) => {
+    console.log(data);
+    printBestMove(data);
+    printMate(data);
+  });
+  currentMoveIndex = moveNum;
+  updateButtonStates();
+}
+
+// Fetch response from API
 async function getBestMove(data = {}) {
     const response = await fetch("https://chess-api.com/v1", {
         method: "POST",
@@ -85,7 +84,8 @@ async function getBestMove(data = {}) {
     return response.json();
 }
 
-function mateCheck(data) {
+// Shows how many moves until mate, if possible
+function printMate(data) {
   if(data.mate != null) {
     document.getElementById("mateIn").innerText = "Mate: In " + data.mate;
   } else {
@@ -93,10 +93,11 @@ function mateCheck(data) {
   }
 }
 
-function errorCheck(data) {
+// Prints the best move
+function printBestMove(data) {
   if(data.type == "error") {
-    document.getElementById("bestMove").innerText = "Not Available";
+    document.getElementById("bestMove").innerText = "Best Move: Not Available";
   } else {
-    document.getElementById("bestMove").innerText = data.text;
+    document.getElementById("bestMove").innerText = "Best Move: " + data.text;
   }
 }
