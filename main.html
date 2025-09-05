@@ -1,53 +1,141 @@
 <!DOCTYPE html>
 <html>
- <head>
-  <!-- Including jQuery: -->
-  <script src = "https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<head>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 
-  <!-- Including the chessboardjs files: -->
-  <script src = "./js/chessboard-1.0.0.js"></script>
-  <link rel = "stylesheet" href = "css/chessboard-1.0.0.min.css">
+    <script src="./js/chessboard-1.0.0.js"></script>
+    <link rel="stylesheet" href="css/chessboard-1.0.0.min.css">
 
-  <!-- chess.js for legal moves/mates -->
-  <script type = "module" src = "chess.js"></script>
+    <script type="module" src="chess.js"></script>
 
-  <script type = "module" src = "./script.js"></script>
- </head>
+    <script type="module" src="./script.js"></script>
 
- <body>
-  <div id = "board" style = "width: 400px"></div>
+    <style>
+        /* General page styling */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #1c1e21;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
 
-    <p></p>
+        /* Container to hold the two boards side-by-side */
+        .boards-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Aligns items to the top */
+            gap: 40px; /* Space between the two boards */
+            margin-bottom: 20px;
+        }
 
-  <!-- Navigation Controls -->
-  <div id = "controls" class = "mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 hidden">
-      <button id = "start" class = "w-full bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">|&lt;</button>
-      <button id = "prev" class = "w-full bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">&lt; Prev</button>
-      <button id = "next" class = "w-full bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">Next &gt;</button>
-      <button id = "end" class = "w-full bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">&gt;|</button>
-  </div>
+        /* Wrapper for each board and its controls */
+        .board-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        /* Fixed size for the boards */
+        #board, #contBoard {
+            width: 400px;
+            height: 400px; /* Explicit height to maintain square shape */
+        }
 
-  <div id = "contBoard" style = "width: 400px"></div>
+        /* Styling for the button grid */
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            width: 400px; /* Match the width of the board */
+            margin-top: 15px;
+        }
 
-  <p></p>
+        /* General button styling */
+        button {
+            background-color: #ffffff;
+            border: 1px solid #ccd0d5;
+            padding: 10px 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
 
-  <!-- Navigation Controls -->
-  <div id = "controls" class = "mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3 hidden">
-      <button id = "contStart" class = "w-full bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">|&lt;</button>
-      <button id = "contPrev" class = "w-full bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">&lt; Prev</button>
-      <button id = "contNext" class = "w-full bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">Next &gt;</button>
-      <button id = "contEnd" class = "w-full bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-md hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition">&gt;|</button>
-  </div>
+        button:hover {
+            background-color: #e9ebee;
+        }
 
-  <p></p>
+        button:disabled {
+            background-color: #f0f2f5;
+            color: #bec3c9;
+            cursor: not-allowed;
+        }
 
-  <h2 id = "bestMove">Best Move: Not Available</h2> <button id = "continuationBtn">Show Continuation</button>
-  <h2 id = "mateIn">Mate: Not Available</h2>
+        /* Styling for the bottom controls section */
+        .info-controls {
+            text-align: center;
+            margin-top: 20px;
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #dddfe2;
+            width: 840px; /* Width to span both boards plus the gap */
+            box-sizing: border-box;
+        }
 
-  <p></p>
+        h2 {
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
 
-  <input type = "text" id = "pgn">
-  <button id = "pgnBtn">Submit</button>
+        input[type="text"] {
+            font-size: 1rem;
+            padding: 10px;
+            border: 1px solid #ccd0d5;
+            width: 300px;
+            margin-right: 10px;
+        }
 
- </body>
+    </style>
+</head>
+
+<body>
+    <div class="boards-container">
+        <div class="board-wrapper">
+            <div id="board"></div>
+            <div class="controls-grid">
+                <button id="start">|&lt;</button>
+                <button id="prev">&lt; Prev</button>
+                <button id="next">Next &gt;</button>
+                <button id="end">&gt;|</button>
+            </div>
+        </div>
+
+        <div class="board-wrapper">
+            <div id="contBoard"></div>
+            <div class="controls-grid">
+                <button id="contStart">|&lt;</button>
+                <button id="contPrev">&lt; Prev</button>
+                <button id="contNext">Next &gt;</button>
+                <button id="contEnd">&gt;|</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-controls">
+        <h2 id="bestMove">Best Move: Not Available</h2>
+        <button id="continuationBtn">Show Continuation</button>
+        <h2 id="mateIn">Mate: Not Available</h2>
+        <p></p>
+        <input type="text" id="pgn" placeholder="Paste PGN here...">
+        <button id="pgnBtn">Submit</button>
+    </div>
+
+</body>
 </html>

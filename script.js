@@ -121,7 +121,7 @@ const contPrev = document.getElementById('contPrev');
 const contNext = document.getElementById('contNext');
 const contEnd = document.getElementById('contEnd');
 
-contStart.addEventListener('click', () => goToContMove(currentMoveIndex));
+contStart.addEventListener('click', () => goToContMove(0));
 contNext.addEventListener('click', () => goToContMove(contMoveIndex + 1));
 contPrev.addEventListener('click', () => goToContMove(contMoveIndex - 1));
 contEnd.addEventListener('click', () => goToContMove(contFenHistory.length - 1));
