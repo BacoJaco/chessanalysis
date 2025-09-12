@@ -30,7 +30,12 @@ function boardSetup() {
   const chessForPGN = new Chess();
 
   const pgn = pgnInput.value;
-  chessForPGN.loadPgn(pgn);
+  try {
+    chessForPGN.loadPgn(pgn);
+  } catch (error) {
+    alert("Invalid PGN");
+    return;
+  }
 
   moves = chessForPGN.history();
 
@@ -69,27 +74,39 @@ function updateButtonStates() {
 }
 
 // Buttons moves
-function goToMove(moveNum) {
+async function goToMove(moveNum) {
+  console.log(moveNum);
+  var prevEval;
+  var color;
   board.position(fenHistory[moveNum]);
-  getBestMove({ fen: fenHistory[moveNum], depth: 20, variants: 1 }).then((data) => {
-    console.log(data);
-    printBestMove(data);
-    printMate(data);
-  });
+  if(moveNum > 1) {
+    console.log("LOOP ENTERED");
+    const data = await getBestMove({ fen: fenHistory[moveNum - 1], depth: 20, variants: 1 })
+      console.log(data);
+      prevEval = data.eval;
+      color = data.color;
+  }
+  console.log(prevEval);
+  const data = await getBestMove({ fen: fenHistory[moveNum], depth: 20, variants: 1 })
+  console.log(data);
+  if(moveNum > 1) showMoveType(data.eval, prevEval, data.to, data.piece, color);
+  printBestMove(data);
+  printMate(data);
+
   currentMoveIndex = moveNum;
   updateButtonStates();
 }
 
 // Fetch response from API
 async function getBestMove(data = {}) {
-    const response = await fetch("https://chess-api.com/v1", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data),
-    });
-    return response.json();
+  const response = await fetch("https://chess-api.com/v1", {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data),
+  });
+  return response.json();
 }
 
 // Shows how many moves until mate, if possible
@@ -98,6 +115,19 @@ function printMate(data) {
     document.getElementById("mateIn").innerText = "Mate: In " + data.mate;
   } else {
     document.getElementById("mateIn").innerText = "Mate: Not Available";
+  }
+}
+
+function showMoveType(currEval, prevEval, square, piece, color) {
+  var evalChange = currEval - prevEval;
+  console.log(evalChange);
+  console.log(square);
+  console.log(piece);
+  console.log(color);
+  var newImg;
+  if(evalChange < -0.20) {
+    newImg = "./img/wikipedia_marked/blunder/" + color + piece + ".png";
+    $('#board .square-' + square + ' img').attr('src', newImg);
   }
 }
 
