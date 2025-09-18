@@ -80,16 +80,14 @@ async function goToMove(moveNum) {
   var color;
   board.position(fenHistory[moveNum]);
   if(moveNum > 1) {
-    console.log("LOOP ENTERED");
     const data = await getBestMove({ fen: fenHistory[moveNum - 1], depth: 20, variants: 1 })
       console.log(data);
       prevEval = data.eval;
-      color = data.color;
   }
   console.log(prevEval);
   const data = await getBestMove({ fen: fenHistory[moveNum], depth: 20, variants: 1 })
   console.log(data);
-  if(moveNum > 1) showMoveType(data.eval, prevEval, data.to, data.piece, color);
+  if(moveNum > 1) showMoveType(data.eval, prevEval);
   printBestMove(data);
   printMate(data);
 
@@ -118,17 +116,15 @@ function printMate(data) {
   }
 }
 
-function showMoveType(currEval, prevEval, square, piece, color) {
-  var evalChange = currEval - prevEval;
-  console.log(evalChange);
-  console.log(square);
-  console.log(piece);
-  console.log(color);
-  var newImg;
-  if(evalChange < -0.20) {
-    newImg = "./img/wikipedia_marked/blunder/" + color + piece + ".png";
-    $('#board .square-' + square + ' img').attr('src', newImg);
-  }
+function showMoveType(currEval, prevEval) {
+  var evalChange = Math.abs(currEval - prevEval);
+  if(evalChange == 0) document.getElementById("moveType").innerText = "Move EVAL: Best Move";
+  if(evalChange > 0 && evalChange <= 0.2) document.getElementById("moveType").innerText = "Move EVAL: Excellent Move";
+  if(evalChange > 0.2 && evalChange <= 0.5) document.getElementById("moveType").innerText = "Move EVAL: Good Move";
+  if(evalChange > 0.5 && evalChange <= 2) document.getElementById("moveType").innerText = "Move EVAL: Inaccuracy";
+  if(evalChange > 2 && evalChange <= 5) document.getElementById("moveType").innerText = "Move EVAL: Mistake";
+  if(evalChange > 5) document.getElementById("moveType").innerText = "Move EVAL: Blunder";
+
 }
 
 // Prints the best move

@@ -57,6 +57,14 @@
             margin-top: 15px;
         }
 
+        /* Make the h3 span all 4 columns and center it */
+        .controls-grid h3 {
+            grid-column: 1 / -1; /* Span all columns */
+            text-align: center;
+            margin: 10px 0;
+            font-size: 1rem;
+        }
+
         /* General button styling */
         button {
             background-color: #ffffff;
@@ -114,6 +122,7 @@
                 <button id="prev">&lt; Prev</button>
                 <button id="next">Next &gt;</button>
                 <button id="end">&gt;|</button>
+                <h3 id="moveType">Move EVAL: Not Available</h3>
             </div>
         </div>
 
