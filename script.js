@@ -77,17 +77,16 @@ function updateButtonStates() {
 async function goToMove(moveNum) {
   console.log(moveNum);
   var prevEval;
-  var color;
   board.position(fenHistory[moveNum]);
   if(moveNum > 1) {
     const data = await getBestMove({ fen: fenHistory[moveNum - 1], depth: 20, variants: 1 })
-      console.log(data);
-      prevEval = data.eval;
+    console.log(data);
+    prevEval = data.eval;
   }
   console.log(prevEval);
   const data = await getBestMove({ fen: fenHistory[moveNum], depth: 20, variants: 1 })
   console.log(data);
-  if(moveNum > 1) showMoveType(data.eval, prevEval);
+  if(moveNum > 1) showMoveType(data.eval, prevEval, moveNum);
   printBestMove(data);
   printMate(data);
 
@@ -109,31 +108,29 @@ async function getBestMove(data = {}) {
 
 // Shows how many moves until mate, if possible
 function printMate(data) {
-  if(data.mate != null) {
-    document.getElementById("mateIn").innerText = "Mate: In " + data.mate;
-  } else {
-    document.getElementById("mateIn").innerText = "Mate: Not Available";
-  }
+  if(data.mate != null) document.getElementById("mateIn").innerText = "Mate: In " + data.mate;
+  else document.getElementById("mateIn").innerText = "Mate: Not Available";
 }
 
-function showMoveType(currEval, prevEval) {
+function showMoveType(currEval, prevEval, moveNum) {
   var evalChange = Math.abs(currEval - prevEval);
-  if(evalChange == 0) document.getElementById("moveType").innerText = "Move EVAL: Best Move";
-  if(evalChange > 0 && evalChange <= 0.2) document.getElementById("moveType").innerText = "Move EVAL: Excellent Move";
-  if(evalChange > 0.2 && evalChange <= 0.5) document.getElementById("moveType").innerText = "Move EVAL: Good Move";
-  if(evalChange > 0.5 && evalChange <= 2) document.getElementById("moveType").innerText = "Move EVAL: Inaccuracy";
-  if(evalChange > 2 && evalChange <= 5) document.getElementById("moveType").innerText = "Move EVAL: Mistake";
-  if(evalChange > 5) document.getElementById("moveType").innerText = "Move EVAL: Blunder";
+  var movePlayed
+  console.log(moveNum);
+  movePlayed = moves[moveNum - 1];
+
+  if(evalChange == 0) document.getElementById("moveType").innerText = "Move EVAL: " + movePlayed + " was Best";
+  if(evalChange > 0 && evalChange <= 0.2) document.getElementById("moveType").innerText = "Move EVAL: " + movePlayed + " was Excellent";
+  if(evalChange > 0.2 && evalChange <= 0.5) document.getElementById("moveType").innerText = "Move EVAL: " + movePlayed + " was Good";
+  if(evalChange > 0.5 && evalChange <= 2) document.getElementById("moveType").innerText = "Move EVAL: " + movePlayed + " was an Inaccuracy";
+  if(evalChange > 2 && evalChange <= 5) document.getElementById("moveType").innerText = "Move EVAL: " + movePlayed + " was a Mistake";
+  if(evalChange > 5) document.getElementById("moveType").innerText = "Move EVAL: " + movePlayed + " was a Blunder";
 
 }
 
 // Prints the best move
 function printBestMove(data) {
-  if(data.type == "error") {
-    document.getElementById("bestMove").innerText = "Best Move: Not Available";
-  } else {
-    document.getElementById("bestMove").innerText = "Best Move: " + data.text;
-  }
+  if(data.type == "error") document.getElementById("bestMove").innerText = "Best Move: Not Available";
+  else document.getElementById("bestMove").innerText = "Best Move: " + data.text;
 }
 
 const continuation = document.getElementById('continuationBtn');
