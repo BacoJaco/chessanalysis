@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+
+    <script src="./js/chessboard-1.0.0.js"></script>
+    <link rel="stylesheet" href="css/chessboard-1.0.0.min.css">
+
+    <script type="module" src="chess.js"></script>
+
+    <script type="module" src="./script.js"></script>
+
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #1c1e21;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .boards-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 40px;
+            margin-bottom: 20px;
+        }
+
+        .board-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        #board, #contBoard {
+            width: 400px;
+            height: 400px;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            width: 400px;
+            margin-top: 15px;
+        }
+
+        .controls-grid h3 {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin: 10px 0;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #ffffff;
+            border: 1px solid #ccd0d5;
+            padding: 10px 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #e9ebee;
+        }
+
+        button:disabled {
+            background-color: #f0f2f5;
+            color: #bec3c9;
+            cursor: not-allowed;
+        }
+
+        .info-controls {
+            text-align: center;
+            margin-top: 20px;
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #dddfe2;
+            width: 840px;
+            box-sizing: border-box;
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="boards-container">
+        <div class="board-wrapper">
+            <div id="board"></div>
+            <div class="controls-grid">
+                <button id="start">|&lt;</button>
+                <button id="prev">&lt; Prev</button>
+                <button id="next">Next &gt;</button>
+                <button id="end">&gt;|</button>
+                <h3 id="moveType">Move EVAL: Not Available</h3>
+            </div>
+        </div>
+
+        <div class="board-wrapper">
+            <div id="contBoard"></div>
+            <div class="controls-grid">
+                <button id="contStart">|&lt;</button>
+                <button id="contPrev">&lt; Prev</button>
+                <button id="contNext">Next &gt;</button>
+                <button id="contEnd">&gt;|</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-controls">
+        <h2 id="bestMove">Best Move: Not Available</h2>
+        <h2 id="mateIn">Mate: Not Available</h2>
+        <button id="continuationBtn">Show Continuation</button>
+    </div>
+
+</body>
+</html>

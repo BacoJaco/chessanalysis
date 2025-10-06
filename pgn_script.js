@@ -12,7 +12,7 @@ document.getElementById('startAnalysis').addEventListener('click', () => {
     const chess = new Chess();
     try {
         chess.loadPgn(pgn);
-        window.location.href = `index.html?pgn=${encodeURIComponent(pgn)}`;
+        window.location.href = `game_analysis.html?pgn=${encodeURIComponent(pgn)}`;
     } catch (error) {
         errorElement.textContent = "Invalid PGN. Please check your input and try again.";
     }
