@@ -8,32 +8,35 @@ var fenHistory = [];
 var contFenHistory = [];
 var moves = [];
 
-const pgnInput = document.getElementById('pgn');
-const pgnButton = document.getElementById('pgnBtn');
+window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const pgn = urlParams.get('pgn');
 
-pgnButton.addEventListener('click', boardSetup);
+    if (pgn) {
+        boardSetup(pgn);
+    }
+};
 
-const start = document.getElementById('start'); 
-const prev = document.getElementById('prev'); 
-const next = document.getElementById('next'); 
-const end = document.getElementById('end'); 
+const start = document.getElementById('start');
+const prev = document.getElementById('prev');
+const next = document.getElementById('next');
+const end = document.getElementById('end');
 
 start.addEventListener('click', () => goToMove(0));
 next.addEventListener('click', () => goToMove(currentMoveIndex + 1));
 prev.addEventListener('click', () => goToMove(currentMoveIndex - 1));
 end.addEventListener('click', () => goToMove(fenHistory.length - 1));
 
-function boardSetup() {
+function boardSetup(pgn) {
   currentMoveIndex = 0;
 
   // A chess instance for getting the move history
   const chessForPGN = new Chess();
 
-  const pgn = pgnInput.value;
   try {
     chessForPGN.loadPgn(pgn);
   } catch (error) {
-    alert("Invalid PGN");
+    alert("Invalid PGN provided in URL.");
     return;
   }
 
@@ -47,7 +50,6 @@ function boardSetup() {
   fenHistory.push(chessForReplay.fen());
   moves.forEach(move => {
     chessForReplay.move(move);
-    // Add the FEN of the new position to our array
     fenHistory.push(chessForReplay.fen());
   });
 
@@ -65,7 +67,6 @@ function boardSetup() {
   contEnd.disabled = true;
 }
 
-// Buttons disable if move is not available
 function updateButtonStates() {
     start.disabled = currentMoveIndex <= 0;
     prev.disabled = currentMoveIndex <= 0;
@@ -73,19 +74,14 @@ function updateButtonStates() {
     end.disabled = currentMoveIndex >= fenHistory.length - 1;
 }
 
-// Buttons moves
 async function goToMove(moveNum) {
-  console.log(moveNum);
   var prevEval;
   board.position(fenHistory[moveNum]);
   if(moveNum > 1) {
     const data = await getBestMove({ fen: fenHistory[moveNum - 1], depth: 20, variants: 1 })
-    console.log(data);
     prevEval = data.eval;
   }
-  console.log(prevEval);
   const data = await getBestMove({ fen: fenHistory[moveNum], depth: 20, variants: 1 })
-  console.log(data);
   if(moveNum > 1) showMoveType(data.eval, prevEval, moveNum);
   printBestMove(data);
   printMate(data);
@@ -94,7 +90,6 @@ async function goToMove(moveNum) {
   updateButtonStates();
 }
 
-// Fetch response from API
 async function getBestMove(data = {}) {
   const response = await fetch("https://chess-api.com/v1", {
       method: "POST",
@@ -106,7 +101,6 @@ async function getBestMove(data = {}) {
   return response.json();
 }
 
-// Shows how many moves until mate, if possible
 function printMate(data) {
   if(data.mate != null) document.getElementById("mateIn").innerText = "Mate: In " + data.mate;
   else document.getElementById("mateIn").innerText = "Mate: Not Available";
@@ -115,7 +109,6 @@ function printMate(data) {
 function showMoveType(currEval, prevEval, moveNum) {
   var evalChange = Math.abs(currEval - prevEval);
   var movePlayed
-  console.log(moveNum);
   movePlayed = moves[moveNum - 1];
 
   if(evalChange == 0) document.getElementById("moveType").innerText = "Move EVAL: " + movePlayed + " was Best";
@@ -124,10 +117,8 @@ function showMoveType(currEval, prevEval, moveNum) {
   if(evalChange > 0.5 && evalChange <= 2) document.getElementById("moveType").innerText = "Move EVAL: " + movePlayed + " was an Inaccuracy";
   if(evalChange > 2 && evalChange <= 5) document.getElementById("moveType").innerText = "Move EVAL: " + movePlayed + " was a Mistake";
   if(evalChange > 5) document.getElementById("moveType").innerText = "Move EVAL: " + movePlayed + " was a Blunder";
-
 }
 
-// Prints the best move
 function printBestMove(data) {
   if(data.type == "error") document.getElementById("bestMove").innerText = "Best Move: Not Available";
   else document.getElementById("bestMove").innerText = "Best Move: " + data.text;
@@ -180,7 +171,6 @@ function goToContMove(moveNum) {
   updateContButtonStates();
 }
 
-// Buttons disable if move is not available
 function updateContButtonStates() {
     contStart.disabled = contMoveIndex <= 0;
     contPrev.disabled = contMoveIndex <= 0;
