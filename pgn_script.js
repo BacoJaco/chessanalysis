@@ -1,4 +1,4 @@
-import { Chess } from '../chess.js';
+import { Chess } from './chess.js';
 
 document.getElementById('startAnalysis').addEventListener('click', () => {
     const pgn = document.getElementById('pgnInput').value;

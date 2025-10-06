@@ -1,4 +1,4 @@
-import { Chess } from '../chess.js'
+import { Chess } from './chess.js'
 
 var board = null;
 var contBoard = null;
