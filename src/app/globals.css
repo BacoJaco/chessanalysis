@@ -1,42 +1,54 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*! chessboard.js v1.0.0 | (c) 2019 Chris Oakman | MIT License chessboardjs.com/license */
+
+.clearfix-7da63 {
+  clear: both;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.board-b72b1 {
+  border: 2px solid #404040;
+  box-sizing: content-box;
 }
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
+.square-55d63 {
+  float: left;
+  position: relative;
+
+  /* disable any native browser highlighting */
+  -webkit-touch-callout: none;
+    -webkit-user-select: none;
+     -khtml-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.white-1e1d7 {
+  background-color: #f0d9b5;
+  color: #b58863;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+.black-3c85d {
+  background-color: #b58863;
+  color: #f0d9b5;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.highlight1-32417, .highlight2-9c5d2 {
+  box-shadow: inset 0 0 3px 3px yellow;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+.notation-322f9 {
+  cursor: default;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  position: absolute;
+}
+
+.alpha-d2270 {
+  bottom: 1px;
+  right: 3px;
+}
+
+.numeric-fc462 {
+  top: 2px;
+  left: 2px;
 }
